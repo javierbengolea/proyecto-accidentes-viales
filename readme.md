@@ -10,4 +10,26 @@ El alcance geográfico se limita a la Ciudad Autónoma de de Buenos Aires. Se es
 
 ## Análisis
 
-Los datos que alimentan este estudio son datos públicos provistos por el Gobierno de la Ciudad de Buenos, https://data.buenosaires.gob.ar/dataset/victimas-siniestros-viales.
+Los datos que alimentan este estudio son datos públicos provistos por el Gobierno de la Ciudad de Buenos, https://data.buenosaires.gob.ar/dataset/victimas-siniestros-viales, los datasets <code>Homicidios</code> y <code>Lesiones</code> y datos censuales del Gobierno de la Nación Argentina.
+
+El objetivo fue hacer un estudio profundo de estos datos correlacionando las variables que lo componen. Por cada Siniestro:
+
+- Número de víctimas
+- Fecha
+- Hora
+- Lugar
+- Tipo de Calle
+- Calle
+- Altura
+- Cruce
+- Comuna
+- Coordenadas <code>lon</code>, <code>lat</code>
+- Participantes
+- Víctima
+- Acusado
+- Gravedad
+
+Con esas dimensiones ya podemos hacer un buen análisis, ya que se dispone información de día hora, geográfica, de tipo de vía, con resultados e involucrados. Se puede complementar con información de la victimologia. Lo más relevante está en la información ya provista y se usa también como complemento la información de los siniestros no fatales.
+
+
+

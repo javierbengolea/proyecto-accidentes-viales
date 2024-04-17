@@ -169,14 +169,13 @@ class App:
         with container_KPI:
 
           df_pob_comunas = pd.read_csv('data/generated/data_comunas_pob.csv')
-          # df_pob_comunas['comuna'] = df_pob_comunas['comuna'].astype(int)
+
           poblacion = df_pob_comunas['poblacion'].sum()
 
           data = self.set_accidentes.copy()
-          # data = data[~data['comuna'].isin(['SD', 'No Especificada'])].query("gravedad == 'FATAL'")
+
           data = data.query("gravedad == 'FATAL'")
-          # data['comuna'] = data['comuna'].astype(int)
-          # data_merged = pd.merge(df_pob_comunas, data, left_on='comuna', right_on='comuna') 
+
           data_merged = data
           data_merged['anio'] = data_merged['fecha_hora'].dt.year
           data_merged['mes'] = data_merged['fecha_hora'].dt.month
@@ -191,15 +190,10 @@ class App:
           summary_df['tasa_deseada'] = summary_df['tasa'].shift(1) * .9
           summary_df['diff'] = summary_df['tasa'].pct_change()*100
 
-          # st.dataframe(summary_df)
-          # st.plotly_chart(px.bar(summary_df, x='semestre', y='diff'))
-
           summary_cl = data_merged.query("victima == 'MOTO'").groupby('anio').agg({'n_victimas': 'sum'}).reset_index()
           summary_cl['tasa'] = (summary_cl['n_victimas']/poblacion) * 100000.0
           summary_cl['tasa_deseada'] = summary_cl['tasa'].shift(1) * .93
           summary_cl['diff'] = summary_cl['tasa'].pct_change()*100
-          # st.dataframe(summary_cl)          
-          # st.plotly_chart(px.bar(summary_cl, x='anio', y='diff'))
 
           dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
           dias_dict = {0: '01-Lunes', 1: '02-Martes', 2: '03-Miércoles', 3: '04-Jueves', 4: '05-Viernes', 5: '06-Sábado', 6: '07-Domingo'}
@@ -213,23 +207,16 @@ class App:
           data_3_k['dia_semana'] = data_3_k['fecha_hora'].dt.day_of_week
           data_3_k['dia_semana_st'] = data_3_k['fecha_hora'].dt.day_of_week.map(dias_dict)
           data_3_k['dia_semana_st'] = data_3_k['dia_semana_st'].str[3:]
-          # st.dataframe(data_3_k)     
+
           data_3_k['hora'] = data_3_k['fecha_hora'].dt.hour
           data_3_k['semestre'] = ((data_3_k['fecha_hora'].dt.month-1)//6)+1
           data_3_k['semestre'] = pd.to_datetime(data_3_k['anio'].astype(str)+'-'+(data_3_k['semestre']*6).astype(str)+"-1")
           data_3_k = data_3_k.query("dia_semana_st in ['Sábado', 'Domingo'] and hora in [6,7,8,9,10,11,12]")
-          # filtro1 = (data_3_k['dia_semana_st'] == 'Sábado') & data_3_k['hora'].isin([6, 7, 8, 9, 10, 11, 12])
-          # filtro2 = (data_3_k['dia_semana_st'] == 'Domingo') & data_3_k['hora'].isin([0, 1, 2, 3, 4, 5])
-          # data_3_k = data_3_k[filtro1 | filtro2]
-          # data_3_k = data_3_k.query("victima = 'PEATON' and es_cruce")
+
           data_3_k = data_3_k.groupby('semestre').agg({'n_victimas': 'sum'}).reset_index()
           data_3_k['tasa'] = (data_3_k['n_victimas']/poblacion) * 100000.0
           data_3_k['tasa_deseada'] = data_3_k['tasa'].shift(1) * .9
           data_3_k['diff'] = data_3_k['tasa'].pct_change()*100
-
-          
-          # st.dataframe(data_3_k)          
-          # st.plotly_chart(px.bar(data_3_k, x='semestre', y='diff'))
 
           kp1_tasa_homicidios = KPI(nombre="Tasa de Homicidios", descripcion="Objetivo reducción 10% intersemestre", reference_value=summary_df.iloc[-1]['tasa_deseada'], current_value=summary_df.iloc[-1]['tasa'])
           kp1_tasa_hm_moto = KPI(nombre="Tasa de Homicidios Motociclistas", descripcion="Objetivo reducción 7% interanual", reference_value=summary_cl.iloc[-1]['tasa_deseada'], current_value=summary_cl.iloc[-1]['tasa'])
@@ -239,35 +226,22 @@ class App:
 
           with kpi_cl1:
             st.plotly_chart(kp1_tasa_homicidios.get_figure(), use_container_width=True, height=150)
-            with st.expander('Indicador'):
-              st.write("Indicador 1")
+            with st.expander('Tasa de Homicidios'):
+              st.write("Métrica: Tasa de Homicidios por 100.000 habitantes.")
+              st.write("Objetivo: Reducir al menos en un 10%.")
+              st.write("Periodo: Semestral.")
           with kpi_cl2:
             st.plotly_chart(kp1_tasa_hm_moto.get_figure(), use_container_width=True)
+            with st.expander('Tasa de Homicidios Motociclistas'):
+              st.write("Métrica: Tasa de Homicidios de Motociclistas por 100.000 habitantes.")
+              st.write("Objetivo: Reducir al menos en un 7%.")
+              st.write("Periodo: Anual.")            
           with kpi_cl3:
             st.plotly_chart(kp1_tasa_hm_horas_max.get_figure(), use_container_width=True)
-
-        col1, col2, col3, col4 = st.columns([.2,.2,.2,.4])
-        
-        # tab1, tab2 = st.tabs(["🔍 Filtros", "🗃 Datos"])
-
-        # with tab1:
-        with col1:
-          # comunas_numeric = data['comuna'].apply(pd.to_numeric, errors='coerce').dropna()
-          # comunas = pd.Series(comunas_numeric.unique()).sort_values().astype(int).astype(str)
-
-          # comuna = st.selectbox("Comuna", comunas)
-          pass
-        with col2:
-          pass
-        with col3:
-          pass
-          # intervalo_select = st.selectbox('Intervalo', ['Anual', 'Semestral', 'Mensual'])
-        with col4:
-          pass
-          # min_year, max_year = st.slider('Elegir años entre',
-          #                     min_value=data['fecha_hora'].dt.to_period('Y').min().year,
-          #                     max_value=data['fecha_hora'].dt.to_period('Y').max().year,
-          #                     value=(data['fecha_hora'].dt.to_period('Y').min().year, data['fecha_hora'].dt.to_period('Y').max().year))
+            with st.expander('Tasa de Homicidios Motociclistas'):
+              st.write("Métrica: Tasa de Homicidios en Horas Pico por 100.000 habitantes.")
+              st.write("Objetivo: Reducir al menos en un 10%.")
+              st.write("Periodo: Semestral.")            
 
         if fatalidad == 'FATAL':
             fatalidad = ['FATAL']
