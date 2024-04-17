@@ -11,3 +11,4 @@ pymysql
 sqlalchemy
 cryptography
 python-dotenv
+shapely
