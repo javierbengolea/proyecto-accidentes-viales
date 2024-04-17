@@ -7,7 +7,7 @@ folium
 streamlit_folium
 ipywidgets
 seaborn
-pyplot
+pymysql
 sqlalchemy
-crytography
+cryptography
 python-dotenv
