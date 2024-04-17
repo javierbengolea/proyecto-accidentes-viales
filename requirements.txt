@@ -6,3 +6,8 @@ openpyxl
 folium
 streamlit_folium
 ipywidgets
+seaborn
+pyplot
+sqlalchemy
+crytography
+python-dotenv
