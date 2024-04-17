@@ -1,0 +1,8 @@
+ydata-profiling
+seaborn==0.12.2
+openpyxl
+nbformat
+researchpy
+ipywidgets
+shapely
+geopandas

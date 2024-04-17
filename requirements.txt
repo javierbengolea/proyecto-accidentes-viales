@@ -1,0 +1,8 @@
+streamlit-nightly
+pandas
+matplotlib
+plotly
+openpyxl
+folium
+streamlit_folium
+ipywidgets
