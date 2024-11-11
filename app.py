@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Set locale to Spanish
-locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
+# locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
 
 def showPie(columna, excluir=["SD"], max=15):
   for substring in excluir:
